@@ -6,8 +6,23 @@
   "scripts": {
     "test": "make test"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/snooze6/c-users.git"
+  },
+  "author": "snooze",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/brentertz/scapegoat/blob/master/LICENSE-MIT"
+    }
+  ],
+  "license": "BSD-2-Clause",
+  "keywords": [
+    "escape",
+    "unescape",
+    "html"
+  ],
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.5.3"
