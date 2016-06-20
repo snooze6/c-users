@@ -8,7 +8,7 @@ var config = require('./config');
 var mongoose = require('mongoose');
 var passport = require('passport');
 require('./models/user');
-require('./config/passport');
+require('./verify/passport');
 
 // app.use(passport.initialize());
 var routerUsers = require('./routes/users');
