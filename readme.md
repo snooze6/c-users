@@ -5,7 +5,9 @@ A small library providing user indentification (integrated with facebook and twi
 
 ## Installation
 
+```sh
   npm install c-users --save
+```
 
 ## Usage
 
