@@ -31,5 +31,9 @@ module.exports = {
             .replace(/&#39;/g, "'")
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>');
+    },
+
+    hello: function () {
+        return 'Hello werld';
     }
 };
