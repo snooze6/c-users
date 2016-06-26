@@ -2,7 +2,7 @@
  * Created by snooze on 6/20/16.
  */
 
-var config = require('../config');
+var config = require('../../config/config');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var User = require('../models/user');
 
