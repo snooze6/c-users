@@ -8,40 +8,40 @@ var UserSchema = require('./app/models/user');
 
 var passport = require('passport');
 
-function parseargs(app, path, mongoUrl, secret, verbose, tag){
-    config.verbose = verbose || true;
-    config.vtag = tag || '[DEBUG] -- ';
+function parseargs(args){
+    config.verbose = args.verbose || true;
+    config.vtag = args.tag || '[DEBUG] -- ';
 
-    if (path) {
-        config.path = path;
-        if (mongoUrl) {
-            config.mongoUrl = mongoUrl;
-            if (app) {
-                config.app = app;
-                if (secret.SECRET) {
-                    config.secretKey = secret.SECRET;
+    if (args.path) {
+        config.path = args.path;
+        if (args.mongoUrl) {
+            config.mongoUrl = args.mongoUrl;
+            if (args.app) {
+                config.app = args.app;
+                if (args.SECRET) {
+                    config.secretKey = args.SECRET;
 
-                    if (secret.FACEBOOK_APPID && secret.FACEBOOK_SECRET) {
+                    if (args.FACEBOOK_APPID && args.FACEBOOK_SECRET) {
                         config.hasFacebook = true;
-                        config.FACEBOOK_APPID = secret.FACEBOOK_APPID;
-                        config.FACEBOOK_SECRET = secret.FACEBOOK_SECRET;
-                        if (verbose) {
-                            console.log(tag + 'Facebook support configured [APPID: ' + config.FACEBOOK_APPID + '] - [SECRET: ' + config.FACEBOOK_SECRET + ']');
+                        config.FACEBOOK_APPID = args.FACEBOOK_APPID;
+                        config.FACEBOOK_SECRET = args.FACEBOOK_SECRET;
+                        if (config.verbose) {
+                            console.log(config.vtag + 'Facebook support configured [APPID: ' + config.FACEBOOK_APPID + '] - [SECRET: ' + config.FACEBOOK_SECRET + ']');
                         }
                     } else {
-                        if (verbose)
+                        if (config.verbose)
                             console.log(config.wtag + 'Facebook support not configured');
                     }
 
-                    if (secret.TWITTER_KEY && secret.TWITTER_SECRET) {
+                    if (args.TWITTER_KEY && args.TWITTER_SECRET) {
                         config.hasFacebook = true;
-                        config.TWITTER_KEY = secret.TWITTER_KEY;
-                        config.TWITTER_SECRET = secret.TWITTER_SECRET;
-                        if (verbose) {
-                            console.log(tag + 'Twitter support configured [APPID: ' + config.TWITTER_KEY + '] - [SECRET: ' + config.TWITTER_SECRET + ']');
+                        config.TWITTER_KEY = args.TWITTER_KEY;
+                        config.TWITTER_SECRET = args.TWITTER_SECRET;
+                        if (config.verbose) {
+                            console.log(config.vtag + 'Twitter support configured [APPID: ' + config.TWITTER_KEY + '] - [SECRET: ' + config.TWITTER_SECRET + ']');
                         }
                     } else {
-                        if (verbose)
+                        if (config.verbose)
                             console.log(config.wtag + 'Twitter support not configured');
                     }
 
@@ -64,28 +64,27 @@ function parseargs(app, path, mongoUrl, secret, verbose, tag){
     }
 }
 
-var doTheThing = function (app, path, mongoUrl, secret, verbose, tag) {
-    if (parseargs(app, path, mongoUrl, secret, verbose, tag)){
-        if (verbose) {
-            console.log(tag + 'Setup called - Path: ' + path + ' - MongoURL: ' + mongoUrl.toString());;
+var doTheThing = function (args) {
+    if (parseargs(args)){
+        if (config.verbose) {
+            console.log(config.vtag + 'Setup called - Path: ' + config.path + ' - MongoURL: ' + config.mongoUrl);;
         }
 
-        app.use(passport.initialize());
+        // app.use(passport.initialize());
 
-        mongoose.connect(mongoUrl);
+        mongoose.connect(config.mongoUrl);
         var db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function () {
             // we're connected!
-            if (verbose)
-                console.log(tag+"Connected correctly to server");
+            if (config.verbose)
+                console.log(config.vtag+"Connected correctly to server");
         });
 
-        require('./config/passport')(passport);
-
+        require('./config/passport').setup(passport);
         var routerUsers = require('./app/routes/users');
 
-        app.use(path, routerUsers);
+        config.app.use(config.path, routerUsers);
     } else {
         throw new Error(tag+'Incorrect parameters');
     }

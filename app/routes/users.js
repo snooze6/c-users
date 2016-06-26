@@ -77,9 +77,6 @@ router.route('/')
     })(req, res, next);
   });
 
-    // var jwt = require('express-jwt');
-    // var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
-
     router.route('/cookies')
         .get(verify.auth, function (req, res, next) {
             if (config.verbose) {
