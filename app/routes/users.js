@@ -100,7 +100,33 @@ router.route('/')
             res.json({cookies: 'Lots of admin cookies', user: {username: req.decoded.username, "_id": req.decoded._id}})
         });
 
+    // =====================================
+    // FACEBOOK ROUTES =====================
+    // =====================================
+    // route for facebook authentication and login
+    router.get('/login/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
+    // handle the callback after facebook has authenticated the user
+    router.get('/login/facebook/callback',
+        passport.authenticate('facebook')
+    );
+
+    // =====================================
+    // TWITTER ROUTES ======================
+    // =====================================
+    // route for twitter authentication and login
+    router.get('/login/twitter', passport.authenticate('twitter'));
+
+    // handle the callback after twitter has authenticated the user
+    router.get('/login/twitter/callback',
+        passport.authenticate('twitter')
+    );
+
+    // route for logging out
+    router.get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+    });
 
 
 

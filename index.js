@@ -25,8 +25,9 @@ function parseargs(args){
                         config.hasFacebook = true;
                         config.FACEBOOK_APPID = args.FACEBOOK_APPID;
                         config.FACEBOOK_SECRET = args.FACEBOOK_SECRET;
+                        config.FACEBOOK_CALLBACK = args.path+'/login/facebook/callback';
                         if (config.verbose) {
-                            console.log(config.vtag + 'Facebook support configured [APPID: ' + config.FACEBOOK_APPID + '] - [SECRET: ' + config.FACEBOOK_SECRET + ']');
+                            console.log(config.vtag + 'Facebook support configured [APPID: ' + config.FACEBOOK_APPID + '] - [SECRET: ' + config.FACEBOOK_SECRET + '] - [CALLBACK: '+config.FACEBOOK_CALLBACK+']');
                         }
                     } else {
                         if (config.verbose)
@@ -37,8 +38,9 @@ function parseargs(args){
                         config.hasFacebook = true;
                         config.TWITTER_KEY = args.TWITTER_KEY;
                         config.TWITTER_SECRET = args.TWITTER_SECRET;
+                        config.TWITTER_CALLBACK = args.path+'/login/twitter/callback';
                         if (config.verbose) {
-                            console.log(config.vtag + 'Twitter support configured [APPID: ' + config.TWITTER_KEY + '] - [SECRET: ' + config.TWITTER_SECRET + ']');
+                            console.log(config.vtag + 'Twitter support configured [APPID: ' + config.TWITTER_KEY + '] - [SECRET: ' + config.TWITTER_SECRET + '] - [CALLBACK: '+config.TWITTER_CALLBACK+']');
                         }
                     } else {
                         if (config.verbose)
