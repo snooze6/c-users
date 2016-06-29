@@ -10,7 +10,7 @@ var sanitizerPlugin = require('mongoose-sanitizer');
 
 var UserSchema = new mongoose.Schema(
     {
-        username: {type: String, lowercase: true, unique: true},
+        username: {type: String, lowercase: true},
         // OauthId: String,
         // OauthToken: String,
         hash: String,
@@ -28,7 +28,6 @@ var UserSchema = new mongoose.Schema(
             displayName  : String,
             username     : String
         },
-
         admin:   {
             type: Boolean,
             default: false

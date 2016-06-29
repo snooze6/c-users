@@ -53,12 +53,10 @@ module.exports = {
          * Setup FacebookStrategy
          */
         passport.use(new FacebookStrategy({
-            
                 // pull in our app id and secret from our auth.js file
                 clientID        : config.FACEBOOK_APPID,
                 clientSecret    : config.FACEBOOK_SECRET,
                 callbackURL     : config.FACEBOOK_CALLBACK
-
             },
 
             // facebook will send back the token and profile
@@ -126,6 +124,8 @@ module.exports = {
                 callbackURL: config.TWITTER_CALLBACK
             },
             function (token, tokenSecret, profile, done) {
+                if (config.verbose)
+                    console.log(config.vtag+'[TWITTER] - Strategy called');
 
                 // make the code asynchronous
                 // User.findOne won't fire until we have all our data back from Twitter
@@ -135,11 +135,16 @@ module.exports = {
 
                         // if there is an error, stop everything and return that
                         // ie an error connecting to the database
-                        if (err)
+                        if (err){
+                            console.log(config.etag + "[TWITTER] ++ Error accessing users database: "+err);
                             return done(err);
+                        }
+
 
                         // if the user is found then log them in
                         if (user) {
+                            if (config.verbose)
+                                console.log(config.vtag + "[TWITTER] -- User exists: " + user.twitter.name);
                             return done(null, user); // user found, return that user
                         } else {
                             // if there is no user, create them
@@ -153,9 +158,16 @@ module.exports = {
 
                             // save our user into the database
                             newUser.save(function (err) {
-                                if (err)
-                                    throw err;
-                                return done(null, newUser);
+                                if (err) {
+                                    console.log(config.etag + "[TWITTER] ++ Error saving user: " + newUser.twitter.username);
+                                    done(err);
+                                } else {
+                                    if (config.verbose)
+                                        console.log(config.vtag + "[TWITTER] -- User saved: " + newUser.twitter.username);
+
+                                    // if successful, return the new user
+                                    return done(null, newUser);
+                                }
                             });
                         }
                     });

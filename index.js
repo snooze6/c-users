@@ -86,8 +86,17 @@ var doTheThing = function (args) {
                 console.log(config.vtag+"Connected correctly to server");
         });
 
-        require('./config/passport').setup(passport);
+        var session = require('express-session');
+        config.app.use(session({
+            resave: false,
+            saveUninitialized: true,
+            secret: config.secretKey
+        }));
+
         config.app.use(passport.initialize());
+        config.app.use(passport.session());
+        require('./config/passport').setup(passport);
+        
         var routerUsers = require('./app/routes/users');
 
         config.app.use(config.path, routerUsers);

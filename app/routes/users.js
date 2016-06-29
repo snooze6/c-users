@@ -143,14 +143,38 @@ router.route('/')
     router.get('/login/twitter', passport.authenticate('twitter'), function(req, res) {});
 
     // handle the callback after twitter has authenticated the user
-    router.get('/login/twitter/callback',
-        passport.authenticate('twitter')
+    router.get('/login/twitter/callback', function(req, res, next){
+            passport.authenticate('twitter', function(err, user, info){
+                if (err) {
+                    return next(err);
+                }
+                if (!user) {
+                    return res.status(401).json({
+                        err: info
+                    });
+                }
+
+                req.logIn(user, function(err) {
+                    if (err) {
+                        console.log(config.etag+'Error al hacer login: '+err);
+                        return res.status(500).json({
+                            err: 'Could not log in user'
+                        });
+                    }
+                    var token = verify.getToken(user);
+                    res.status(200).json({
+                        status: 'Login successful!',
+                        success: true,
+                        token: token
+                    });
+                });
+            })(req,res,next);
+        }
     );
 
     // route for logging out
     router.get('/logout', function(req, res) {
         req.logout();
-        res.redirect('/');
     });
 
 
