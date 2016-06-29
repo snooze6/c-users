@@ -63,3 +63,13 @@ cd <project location>
 sudo npm unlink c-users
 sudo npm rm --global c-users
 ```
+
+## TODO
+
+- [X] Twitter support
+- [X] Google+ support
+- [X] Facebook support
+- [ ] Linkedin support
+- [ ] Linking all accounts together
+- [ ] Roles and Permissions (Important!)
+- [ ] Security revision (Important!)
