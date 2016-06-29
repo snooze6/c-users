@@ -11,6 +11,11 @@ var passport = require('passport');
 function parseargs(args){
     config.verbose = args.verbose || true;
     config.vtag = args.tag || '[DEBUG] -- ';
+    config.this = args.this || 'http://localhost:3000';
+
+    if (config.verbose){
+        console.log(config.vtag+'This: '+config.this)
+    }
 
     if (args.path) {
         config.path = args.path;
@@ -25,7 +30,7 @@ function parseargs(args){
                         config.hasFacebook = true;
                         config.FACEBOOK_APPID = args.FACEBOOK_APPID;
                         config.FACEBOOK_SECRET = args.FACEBOOK_SECRET;
-                        config.FACEBOOK_CALLBACK = args.path+'/login/facebook/callback';
+                        config.FACEBOOK_CALLBACK = config.this+args.path+'/login/facebook/callback/';
                         if (config.verbose) {
                             console.log(config.vtag + 'Facebook support configured [APPID: ' + config.FACEBOOK_APPID + '] - [SECRET: ' + config.FACEBOOK_SECRET + '] - [CALLBACK: '+config.FACEBOOK_CALLBACK+']');
                         }
@@ -38,7 +43,7 @@ function parseargs(args){
                         config.hasFacebook = true;
                         config.TWITTER_KEY = args.TWITTER_KEY;
                         config.TWITTER_SECRET = args.TWITTER_SECRET;
-                        config.TWITTER_CALLBACK = args.path+'/login/twitter/callback';
+                        config.TWITTER_CALLBACK = config.this+args.path+'/login/twitter/callback/';
                         if (config.verbose) {
                             console.log(config.vtag + 'Twitter support configured [APPID: ' + config.TWITTER_KEY + '] - [SECRET: ' + config.TWITTER_SECRET + '] - [CALLBACK: '+config.TWITTER_CALLBACK+']');
                         }
@@ -72,8 +77,6 @@ var doTheThing = function (args) {
             console.log(config.vtag + 'Setup called - Path: ' + config.path + ' - MongoURL: ' + config.mongoUrl);;
         }
 
-        // app.use(passport.initialize());
-
         mongoose.connect(config.mongoUrl);
         var db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error:'));
@@ -84,6 +87,7 @@ var doTheThing = function (args) {
         });
 
         require('./config/passport').setup(passport);
+        config.app.use(passport.initialize());
         var routerUsers = require('./app/routes/users');
 
         config.app.use(config.path, routerUsers);

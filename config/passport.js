@@ -57,7 +57,7 @@ module.exports = {
                 // pull in our app id and secret from our auth.js file
                 clientID        : config.FACEBOOK_APPID,
                 clientSecret    : config.FACEBOOK_SECRET,
-                callbackURL     : config.FACEBOOK_SECRET
+                callbackURL     : config.FACEBOOK_CALLBACK
 
             },
 
@@ -86,7 +86,9 @@ module.exports = {
                             newUser.facebook.id    = profile.id; // set the users facebook id
                             newUser.facebook.token = token; // we will save the token that facebook provides to the user
                             newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                            newUser.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+                            if (profile.emails) {
+                                newUser.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+                            }
 
                             // save our user to the database
                             newUser.save(function(err) {

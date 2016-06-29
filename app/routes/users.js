@@ -104,18 +104,41 @@ router.route('/')
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
-    router.get('/login/facebook', passport.authenticate('facebook', { scope : 'email' }));
+    router.get('/login/facebook', passport.authenticate('facebook', { scope : 'email' }),  function(req, res) {});
 
     // handle the callback after facebook has authenticated the user
-    router.get('/login/facebook/callback',
-        passport.authenticate('facebook')
+    router.get('/login/facebook/callback', function(req, res, next){
+        passport.authenticate('facebook', function(err, user,info){
+            if (err) {
+                return next(err);
+            }
+            if (!user) {
+                return res.status(401).json({
+                    err: info
+                });
+            }
+            req.logIn(user, function(err) {
+                if (err) {
+                    return res.status(500).json({
+                        err: 'Could not log in user'
+                    });
+                }
+                var token = Verify.getToken(user);
+                res.status(200).json({
+                    status: 'Login successful!',
+                    success: true,
+                    token: token
+                });
+            });
+        })(req,res,next);
+        }
     );
 
     // =====================================
     // TWITTER ROUTES ======================
     // =====================================
     // route for twitter authentication and login
-    router.get('/login/twitter', passport.authenticate('twitter'));
+    router.get('/login/twitter', passport.authenticate('twitter'), function(req, res) {});
 
     // handle the callback after twitter has authenticated the user
     router.get('/login/twitter/callback',

@@ -3,6 +3,7 @@
  */
 
 module.exports = {
+    "this": null,
     verbose: true,
         vtag: '[DEBUG] -- ',
         etag: '[ERROR] ++ ',
