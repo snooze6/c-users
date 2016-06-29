@@ -40,7 +40,7 @@ function parseargs(args){
                     }
 
                     if (args.TWITTER_KEY && args.TWITTER_SECRET) {
-                        config.hasFacebook = true;
+                        config.hasTwitter = true;
                         config.TWITTER_KEY = args.TWITTER_KEY;
                         config.TWITTER_SECRET = args.TWITTER_SECRET;
                         config.TWITTER_CALLBACK = config.this+args.path+'/login/twitter/callback/';
@@ -50,6 +50,19 @@ function parseargs(args){
                     } else {
                         if (config.verbose)
                             console.log(config.wtag + 'Twitter support not configured');
+                    }
+
+                    if (args.GOOGLE_APPID && args.GOOGLE_SECRET) {
+                        config.hasGoogle = true;
+                        config.GOOGLE_APPID = args.GOOGLE_APPID;
+                        config.GOOGLE_SECRET = args.GOOGLE_SECRET;
+                        config.GOOGLE_CALLBACK = config.this+args.path+'/login/google/callback/';
+                        if (config.verbose) {
+                            console.log(config.vtag + 'Google support configured [APPID: ' + config.GOOGLE_APPID + '] - [SECRET: ' + config.GOOGLE_SECRET + '] - [CALLBACK: '+config.GOOGLE_CALLBACK+']');
+                        }
+                    } else {
+                        if (config.verbose)
+                            console.log(config.wtag + 'Google support not configured');
                     }
 
                     return true;
@@ -96,7 +109,7 @@ var doTheThing = function (args) {
         config.app.use(passport.initialize());
         config.app.use(passport.session());
         require('./config/passport').setup(passport);
-        
+
         var routerUsers = require('./app/routes/users');
 
         config.app.use(config.path, routerUsers);

@@ -18,6 +18,10 @@ module.exports = {
         FACEBOOK_APPID: null,
         FACEBOOK_SECRET: null,
         FACEBOOK_CALLBACK: null,
+    hasGoogle: false,
+        GOOGLE_APPID: null,
+        GOOGLE_SECRET: null,
+        GOOGLE_CALLBACK: null,
 
     app: null,
     mongoUrl: null,
