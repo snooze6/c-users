@@ -14,14 +14,20 @@ A small library providing user indentification (integrated with facebook and twi
 ```js
     require('c-users').setup(
         {
+            "this": 'http://localhost:3000',
             app: app,
             path: '/api/users',
             mongoUrl:  '<mongourl here>',
             SECRET: '<secret here>',
             FACEBOOK_APPID: '<facebook appid here>',
             FACEBOOK_SECRET: '<facebook secret here>',
+            FACEBOOK_CALLBACK: '',
             TWITTER_KEY: '<twitter key here>',
             TWITTER_SECRET: '<twitter secret here>',
+            TWITTER_CALLBACK: '',
+            GOOGLE_APPID: '<google appid here>',
+            GOOGLE_SECRET: '<google secret here>',
+            GOOGLE_CALLBACK: '',
             verbose: true,
             tag: '[DEBUG] -- '
         }
