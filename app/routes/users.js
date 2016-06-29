@@ -104,11 +104,11 @@ router.route('/')
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
-    router.get('/login/facebook', passport.authenticate('facebook', { scope : 'email' }),  function(req, res) {});
+    router.get('/login/facebook', passport.authenticate('facebook'),  function(req, res) {});
 
     // handle the callback after facebook has authenticated the user
     router.get('/login/facebook/callback', function(req, res, next){
-        passport.authenticate('facebook', function(err, user,info){
+        passport.authenticate('facebook', function(err, user, info){
             if (err) {
                 return next(err);
             }
@@ -117,13 +117,15 @@ router.route('/')
                     err: info
                 });
             }
+
             req.logIn(user, function(err) {
                 if (err) {
+                    console.log(config.etag+'Error al hacer login: '+err);
                     return res.status(500).json({
                         err: 'Could not log in user'
                     });
                 }
-                var token = Verify.getToken(user);
+                var token = verify.getToken(user);
                 res.status(200).json({
                     status: 'Login successful!',
                     success: true,

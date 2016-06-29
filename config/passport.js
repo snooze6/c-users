@@ -63,6 +63,8 @@ module.exports = {
 
             // facebook will send back the token and profile
             function(token, refreshToken, profile, done) {
+                if (config.verbose)
+                    console.log(config.vtag+'[FACEBOOK] - Strategy called');
 
                 // asynchronous
                 process.nextTick(function() {
@@ -72,11 +74,15 @@ module.exports = {
 
                         // if there is an error, stop everything and return that
                         // ie an error connecting to the database
-                        if (err)
+                        if (err) {
+                            console.log(config.etag + "[FACEBOOK] ++ Error accessing users database: "+err);
                             return done(err);
+                        }
 
                         // if the user is found, then log them in
                         if (user) {
+                            if (config.verbose)
+                                console.log(config.vtag + "[FACEBOOK] -- User exists: " + user.facebook.name);
                             return done(null, user); // user found, return that user
                         } else {
                             // if there is no user found with that facebook id, create them
@@ -85,18 +91,23 @@ module.exports = {
                             // set all of the facebook information in our user model
                             newUser.facebook.id    = profile.id; // set the users facebook id
                             newUser.facebook.token = token; // we will save the token that facebook provides to the user
-                            newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
+                            newUser.facebook.name  = profile.displayName; // look at the passport user profile to see how names are returned
                             if (profile.emails) {
                                 newUser.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
                             }
 
                             // save our user to the database
                             newUser.save(function(err) {
-                                if (err)
-                                    throw err;
-
-                                // if successful, return the new user
-                                return done(null, newUser);
+                                if (err) {
+                                    console.log(config.etag + "[FACEBOOK] ++ Error saving user: " + newUser.facebook.name);
+                                    done(err);
+                                } else {
+                                    if (config.verbose)
+                                        console.log(config.vtag + "[FACEBOOK] -- User saved: " + newUser.facebook.name);
+                                    
+                                    // if successful, return the new user
+                                    return done(null, newUser);
+                                }
                             });
                         }
 
