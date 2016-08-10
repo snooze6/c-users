@@ -10,12 +10,13 @@ var sanitizerPlugin = require('mongoose-sanitizer');
 
 var UserSchema = new mongoose.Schema(
     {
-        username: {type: String, lowercase: true},
         // OauthId: String,
         // OauthToken: String,
-        hash: String,
         // salt: String,
-
+        local            : {
+            username: {type: String, lowercase: true},
+            password: String,
+        },
         facebook         : {
             id           : String,
             token        : String,
@@ -46,14 +47,14 @@ var UserSchema = new mongoose.Schema(
 UserSchema.plugin(sanitizerPlugin);
 
 // methods ======================
-// generating a hash
+// generating a password
 UserSchema.methods.setPassword = function(password) {
-    this.hash =  bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    this.local.password =  bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
 // checking if password is valid
 UserSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.hash);
+    return bcrypt.compareSync(password, this.local.password);
 };
 
 // /**
@@ -63,12 +64,12 @@ UserSchema.methods.validPassword = function(password) {
 //  */
 // UserSchema.methods.setPassword = function(password){
 //     this.salt = crypto.randomBytes(16).toString('hex');
-//     this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
+//     this.password = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
 // };
 //
 // UserSchema.methods.validPassword = function(password) {
-//     var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
-//     return this.hash === hash;
+//     var password = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
+//     return this.password === password;
 // };
 
 UserSchema.methods.generateJWT = function() {
