@@ -92,6 +92,7 @@ module.exports = {
                                 newUser.facebook.id = profile.id; // set the users facebook id
                                 newUser.facebook.token = token; // we will save the token that facebook provides to the user
                                 newUser.facebook.name = profile.displayName; // look at the passport user profile to see how names are returned
+                                newUser.local.username = profile.displayName;
                                 if (profile.emails) {
                                     newUser.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
                                 }
@@ -101,6 +102,7 @@ module.exports = {
                                     if (err) {
                                         console.log(config.etag + "[FACEBOOK] ++ Error saving user: " + newUser.facebook.name);
                                         done(err);
+                                        console.log(newUser)
                                     } else {
                                         if (config.verbose)
                                             console.log(config.vtag + "[FACEBOOK] -- User saved: " + newUser.facebook.name);
@@ -159,6 +161,7 @@ module.exports = {
                                 newUser.twitter.token = token;
                                 newUser.twitter.username = profile.username;
                                 newUser.twitter.displayName = profile.displayName;
+                                newUser.local.username = profile.displayName;
 
                                 // save our user into the database
                                 newUser.save(function (err) {
@@ -214,6 +217,7 @@ module.exports = {
                                 newUser.google.id = profile.id;
                                 newUser.google.token = token;
                                 newUser.google.name = profile.displayName;
+                                newUser.local.username = profile.displayName;
                                 newUser.google.email = profile.emails[0].value; // pull the first email
 
                                 // save the user

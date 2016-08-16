@@ -84,6 +84,7 @@ router.route('/cookies')
         }
         res.json({cookies: 'Lots of cookies'})
     });
+
 router.route('/isValid')
     .get(verify.verifyOrdinaryUser, function (req, res, next) {
         if (config.verbose) {
