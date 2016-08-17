@@ -30,8 +30,7 @@ router.route('/')
         });
     })
     .post(function (req, res, next) {
-        console.log('Posted')
-        if (!req.body.username || !req.body.password) {
+        if (!req.body.username || !req.body.password || !req.body.email) {
             return res.status(400).json({message: 'Please fill out all fields'});
         }
         if (config.verbose) {
@@ -40,6 +39,7 @@ router.route('/')
 
         var user = new User();
         user.local.username = req.body.username;
+        user.local.email = req.body.email;
         user.setPassword(req.body.password);
 
         user.save(function (err, user) {
