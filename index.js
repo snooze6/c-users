@@ -125,5 +125,6 @@ var doTheThing = function (args) {
  * @return {String}
  */
 module.exports = {
-    setup: doTheThing
+    setup: doTheThing,
+    verify: require('./app/verify/verify')
 };

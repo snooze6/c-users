@@ -54,4 +54,4 @@ exports.verifyAdminUser = function (req, res, next) {
 // exports.auth = jwt({secret: config.secretKey, userProperty: 'payload'});
 exports.auth = function (req, res, next) {
     next();
-}
+};
