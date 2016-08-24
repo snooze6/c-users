@@ -38,7 +38,7 @@ router.route('/')
         }
 
         var user = new User();
-        user.local.username = req.body.username;
+        user.username = req.body.username;
         user.local.email = req.body.email;
         user.setPassword(req.body.password);
 

@@ -14,8 +14,11 @@ var UserSchema = new mongoose.Schema(
         // OauthToken: String,
         // salt: String,
 
+
+        username: {type: String, lowercase: true},
+
         local            : {
-            username: {type: String, lowercase: true},
+
             password: String,
             email: String,
         },
