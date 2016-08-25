@@ -4,7 +4,7 @@
 
 var config = require('./config/config');
 var mongoose = require('mongoose');
-var UserSchema = require('./app/models/user');
+// var UserSchema = require('./app/models/user');
 
 var passport = require('passport');
 
@@ -64,6 +64,12 @@ function parseargs(args){
                         if (config.verbose)
                             console.log(config.wtag + 'Google support not configured');
                     }
+
+                    if (args.model) {
+                        console.log(config.vtag + 'Model configured');
+                        console.log(config.vtag + args.model.toString())
+                    }
+                    require('./app/models/user').setup(args.model);
 
                     return true;
                 } else {

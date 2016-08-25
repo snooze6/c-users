@@ -35,12 +35,18 @@ router.route('/')
         }
         if (config.verbose) {
             console.log(config.vtag + "POST USER [Login: " + req.body.username + "] [Pass: " + req.body.password + "]");
+            if (req.body.data) {
+                console.log(config.vtag + "DATA: "+req.body.data.toString());
+            }
         }
 
         var user = new User();
         user.username = req.body.username;
         user.local.email = req.body.email;
         user.setPassword(req.body.password);
+        if (req.body.data) {
+            user.data = req.body.data;
+        }
 
         user.save(function (err, user) {
             if (err) return next(err);

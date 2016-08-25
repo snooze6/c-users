@@ -29,7 +29,11 @@ A small library providing user indentification (integrated with facebook and twi
             GOOGLE_SECRET: '<google secret here>',
             GOOGLE_CALLBACK: '',
             verbose: true,
-            tag: '[DEBUG] -- '
+            tag: '[DEBUG] -- ',
+            model: {
+               photo: String,
+               alias: String
+            }
         }
     );
 ```
@@ -69,6 +73,7 @@ sudo npm rm --global c-users
 - [X] Twitter support
 - [X] Google+ support
 - [X] Facebook support
+- [X] Data model support
 - [ ] Linkedin support
 - [ ] Linking all accounts together
 - [ ] Roles and Permissions (Important!)
