@@ -15,7 +15,7 @@ var UserSchema = new mongoose.Schema(
         // salt: String,
 
 
-        username: {type: String, lowercase: true},
+        username: {type: String, lowercase: true, unique : true, required : true},
 
 
 

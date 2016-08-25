@@ -35,7 +35,7 @@ module.exports = {
          */
         passport.use(new LocalStrategy(
             function (username, password, done) {
-                User.findOne({'local.username': username}, function (err, user) {
+                User.findOne({'username': username}, function (err, user) {
                     if (err) {
                         return done(err);
                     }
@@ -92,7 +92,7 @@ module.exports = {
                                 newUser.facebook.id = profile.id; // set the users facebook id
                                 newUser.facebook.token = token; // we will save the token that facebook provides to the user
                                 newUser.facebook.name = profile.displayName; // look at the passport user profile to see how names are returned
-                                newUser.local.username = profile.displayName;
+                                newUser.username = profile.displayName;
                                 if (profile.emails) {
                                     newUser.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
                                 }
@@ -161,7 +161,7 @@ module.exports = {
                                 newUser.twitter.token = token;
                                 newUser.twitter.username = profile.username;
                                 newUser.twitter.displayName = profile.displayName;
-                                newUser.local.username = profile.displayName;
+                                newUser.username = profile.displayName;
 
                                 // save our user into the database
                                 newUser.save(function (err) {
@@ -217,7 +217,7 @@ module.exports = {
                                 newUser.google.id = profile.id;
                                 newUser.google.token = token;
                                 newUser.google.name = profile.displayName;
-                                newUser.local.username = profile.displayName;
+                                newUser.username = profile.displayName;
                                 newUser.google.email = profile.emails[0].value; // pull the first email
 
                                 // save the user
