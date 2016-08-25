@@ -4,7 +4,9 @@
 
 var config = require('./config/config');
 var mongoose = require('mongoose');
+var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 // var UserSchema = require('./app/models/user');
+var User = null;
 
 var passport = require('passport');
 
@@ -70,6 +72,7 @@ function parseargs(args){
                         console.log(config.vtag + args.model.toString())
                     }
                     require('./app/models/user').setup(args.model);
+                    User = mongoose.model('User');
 
                     return true;
                 } else {
@@ -124,6 +127,44 @@ var doTheThing = function (args) {
     }
 };
 
+var decrypt = function (token) {
+    return new Promise(function (fulfill, reject){
+        if (token) {
+            jwt.verify(token, config.secretKey, function (err, decoded) {
+                if (!err) {
+                    // if everything is good, save to request for use in other routes
+                    // console.log(decoded);
+                    fulfill(decoded);
+                } else {
+                    reject(err)
+                }
+            });
+        } else {
+            reject(new Error('No token provided'))
+        }
+    });
+};
+
+var resolve = function (username) {
+    return new Promise(function (fulfill, reject){
+        if (username) {
+            User.find({"username": username}, {"salt": 0, "password": 0}).exec(function (err, user) {
+                if (err) {
+                    reject(err)
+                } else {
+                    // console.log(user);
+                    if (user && user[0] && user[0]._id)
+                        fulfill(user[0]._id)
+                    else
+                        reject(new Error('User not found'))
+                }
+            });
+        } else {
+            reject(new Error('Not username provided'))
+        }
+    });
+};
+
 /**
  * Escape special characters in the given string of html.
  *
@@ -132,5 +173,7 @@ var doTheThing = function (args) {
  */
 module.exports = {
     setup: doTheThing,
-    verify: require('./app/verify/verify')
+    verify: require('./app/verify/verify'),
+    decrypt: decrypt,
+    resolve: resolve
 };
