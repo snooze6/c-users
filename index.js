@@ -65,6 +65,17 @@ function parseargs(args){
                             console.log(config.wtag + 'Google support not configured');
                     }
 
+
+                    if (args.userData){
+
+                    }else{
+                        console.log("No extra data in the model")
+                    }
+
+
+
+
+
                     return true;
                 } else {
                     console.log(config.etag + 'Must specify a secret key');

@@ -17,7 +17,9 @@ var UserSchema = new mongoose.Schema(
 
         username: {type: String, lowercase: true},
 
-        local            : {
+
+
+        local               : {
 
             password: String,
             email: String,
