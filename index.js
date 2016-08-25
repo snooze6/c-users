@@ -154,7 +154,7 @@ var resolve = function (username) {
                 } else {
                     // console.log(user);
                     if (user && user[0] && user[0]._id)
-                        fulfill(user[0]._id)
+                        fulfill(user[0]._id);
                     else
                         reject(new Error('User not found'))
                 }
@@ -175,5 +175,6 @@ module.exports = {
     setup: doTheThing,
     verify: require('./app/verify/verify'),
     decrypt: decrypt,
-    resolve: resolve
+    resolve: resolve,
+    model: User
 };
