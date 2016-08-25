@@ -7,6 +7,7 @@ var bcrypt   = require('bcrypt-nodejs');
 var jwt = require('jsonwebtoken');
 var config = require('../../config/config');
 var sanitizerPlugin = require('mongoose-sanitizer');
+var mongoosePaginate = require('mongoose-paginate');
 
 module.exports = {
     setup: function (model) {
@@ -86,6 +87,7 @@ module.exports = {
             );
         }
         UserSchema.plugin(sanitizerPlugin);
+        UserSchema.plugin(mongoosePaginate);
 
         // methods ======================
         // generating a password
@@ -114,6 +116,6 @@ module.exports = {
             }, config.secretKey);
         };
 
-        return mongoose.model('User', UserSchema)
+        return UserSchema
     }
 };
