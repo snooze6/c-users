@@ -173,8 +173,5 @@ var resolve = function (username) {
  */
 module.exports = {
     setup: doTheThing,
-    verify: require('./app/verify/verify'),
-    decrypt: decrypt,
-    resolve: resolve,
-    model: User
+    verify: require('./app/verify/verify')
 };
