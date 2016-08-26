@@ -7,8 +7,10 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 // var UserSchema = require('./app/models/user');
 var User = null;
-
+var userSchema ;
 var passport = require('passport');
+
+
 
 function parseargs(args){
     config.verbose = args.verbose || true;
@@ -21,6 +23,10 @@ function parseargs(args){
 
     if (args.path) {
         config.path = args.path;
+        if(args.mongoose){
+            console.log(config.vtag+"MONGOOSE CONFIGURED")
+            mongoose = args.mongoose;
+        }
         if (args.mongoUrl) {
             config.mongoUrl = args.mongoUrl;
             if (args.app) {
@@ -68,12 +74,12 @@ function parseargs(args){
                     }
 
                     if (args.model) {
-                        console.log(config.vtag + 'Model configured');
-                        console.log(config.vtag + args.model.toString())
+                        console.log(config.vtag + "MODEL DETECTED" + args.model.toString())
                     }
-                    require('./app/models/user').setup(args.model);
-                    User = mongoose.model('User');
 
+                    userSchema = require('./app/models/user').setup(args.model)
+                    User = mongoose.model('User',userSchema);
+                    console.log(config.vtag + 'Model configured');
                     return true;
                 } else {
                     console.log(config.etag + 'Must specify a secret key');
@@ -165,6 +171,27 @@ var resolve = function (username) {
     });
 };
 
+
+var getModel = function(){
+    if(User){
+        return User;
+    }
+};
+
+
+var getMongoose = function(){
+    if(mongoose){
+        return mongoose;
+    }
+};
+
+
+var getUserSchema = function () {
+    if(userSchema){
+        return userSchema
+    }
+};
+
 /**
  * Escape special characters in the given string of html.
  *
@@ -173,5 +200,10 @@ var resolve = function (username) {
  */
 module.exports = {
     setup: doTheThing,
-    verify: require('./app/verify/verify')
+    verify: require('./app/verify/verify'),
+    decrypt: decrypt,
+    resolve: resolve,
+    model: getModel,
+    mongoose: getMongoose,
+    userSchema: getUserSchema
 };

@@ -33,6 +33,7 @@
     "express-session": "^1.13.0",
     "jsonwebtoken": "^7.0.1",
     "mongoose": "^4.5.1",
+    "mongoose-paginate": "^5.0.0",
     "mongoose-sanitizer": "^1.0.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
